@@ -1,0 +1,44 @@
+Seed size
+========================================================
+
+Set dir! GGplot!
+```{r}
+setwd("~/projects/R_reports")
+library(ggplot2)
+```
+
+Get phenotypic data from panzea, genome size from Chia
+```{r}
+#phenotypic data from panzea
+system('curl -o - http://www.panzea.org/dynamic/derivative_data/traitMatrix_maize282NAM_v15-130212.txt | perl -ne \'$_=~s/<Trait>/Line/; next if $_=~m/Header/; print $_;\' > data/nam_phenos.txt')
+nam<-read.table("data/nam_phenos.txt",header=T)
+
+#genome size data taken from Table S13 from Chia:
+system('curl -o - https://gist.github.com/rossibarra/7638160/raw/05586b4856f620a2d3af1a1ee5ebf189484b14b5/genome_size > data/gsize.txt')
+gsize<-read.table("data/gsize.txt",header=T)
+
+#merge
+gseed<-merge(gsize,nam,by="Line")
+```
+
+## No genome size correlation with seed weight, volume, plant height, or ear height.
+
+Plot 20 kernel weight vs. standardized genome size. Note there are multiple similar variables, but none are significantly correlated with genome size (not shown) and they vary in direction of trend! Not much exciting for volume either
+```{r fig.width=3, fig.height=3}
+ggplot(data=gseed,aes(x=GenomeSize,y=X20KernelWeight))+geom_point()+geom_smooth(method="lm")
+ggplot(data=gseed,aes(x=GenomeSize,y=TotalKernelVolume))+geom_point()+geom_smooth(method="lm")
+```
+
+## Flowering time significantly correlated with genome size.
+
+Plot DTT vs. standardized genome size. Positive and significant. Also for ASI and DTS. 
+```{r fig.width=3, fig.height=3}
+ggplot(data=gseed,aes(x=GenomeSize,y=DaysToTassel))+geom_point()+geom_smooth(method="lm")
+```
+
+## Leaf size significantly correlated with genome size.
+
+Plot leaf width vs. standardized genome size. Also leaf length and leaf angle (huh?)
+```{r fig.width=3, fig.height=3}
+ggplot(data=gseed,aes(x=GenomeSize,y=LeafWidth))+geom_point()+geom_smooth(method="lm")
+```
