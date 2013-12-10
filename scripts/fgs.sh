@@ -1,14 +1,14 @@
 #!/bin/bash -l
 #SBATCH -D /home/jri/projects/genomesize
-#SBATCH -J jellyfish
+#SBATCH -J FGSmap
 #SBATCH -o outs/out-%j.txt
 #SBATCH -p serial
 #SBATCH -e errors/error-%j.txt
 
-# script to run jellyfish on paul's files
+# script to run bwa mem on paul's files
 
 FILES=/group/jrigrp/Share/PaulB_Data/Run1_Fwd/*fastq
-alias JELLY="/home/jri/pkg/bin/jellyfish"
+
 
 for f in $FILES;
 do
