@@ -13,7 +13,7 @@ for f in $FILES;
 do
 	echo "$f"
 	NAME=$( echo "$f" | sed -e 's/\/home\/jri\/projects\/genomesize\/results\///g')
-	echo $NAME $( bedtools genomecov -ibam $f -g /home/jri/projects/genomesize/data/cdna_length_file.txt | \
+	echo $NAME $( samtools view -c $f ) $( bedtools genomecov -ibam $f -g /home/jri/projects/genomesize/data/cdna_length_file.txt | \
         perl -ne 'while(<>){ chomp; @data=split(/\t/,$_);
 	$depths{$data[0]}+=$data[1]*$data[4]; $lengths{$data[0]}=$data[3]; $tbp_align+=$data[1]*$data[2]; }
 	END { print STDERR $ngenes; foreach(keys(%depths)){ $ngenes++; $fpkm+=($depths{$_}-$fpkm)/$ngenes; 
