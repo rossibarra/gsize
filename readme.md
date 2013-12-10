@@ -22,4 +22,4 @@ seed_size.Rmd: R markdown of NAM genome size from Chia et al. vs. phenotype data
 Shows plant height flowering time correlation, but not with seed size.
 
 Zea_mays.AGPv3.20.cdna.all.fa: cdna ab initio for v3 reference genome. Probably sucky, but should catch all/most real stuff.
-
+cdna_lengths: length of each cdna in Zea_mays.AGPv3.20.cdna.all.fa, u seful for calculating per gene depth.
