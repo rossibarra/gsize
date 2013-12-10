@@ -1,3 +1,4 @@
+results/*.merged
 data/Zea_mays.AGPv3.20.cdna.all.fa
 temp/*
 errors/*
