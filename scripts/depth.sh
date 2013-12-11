@@ -13,12 +13,21 @@ for f in $FILES;
 do
 	echo "$f"
 	NAME=$( echo "$f" | sed -e 's/\/home\/jri\/projects\/genomesize\/results\///g')
-	echo $NAME $( samtools view -c $f ) $( bedtools genomecov -ibam $f -g /home/jri/projects/genomesize/data/cdna_length_file.txt | \
+#	echo $NAME $( samtools view -c $f ) $( bedtools genomecov -ibam $f -g /home/jri/projects/genomesize/data/cdna_length_file.txt | \
+#        perl -ne 'while(<>){ chomp; @data=split(/\t/,$_);
+#	$depths{$data[0]}+=$data[1]*$data[4]; $lengths{$data[0]}=$data[3]; $tbp_align+=$data[1]*$data[2]; }
+#	END { print STDERR $ngenes; foreach(keys(%depths)){ $ngenes++; $fpkm+=($depths{$_}-$fpkm)/$ngenes; 
+#	$weighted_fpkm+=$depths{$_}*$lengths{$_}; $total_length+=$lengths{$_};}; 
+#	$weighted_fpkm=$weighted_fpkm/$total_length; print "$tbp_align\t$fpkm\t$weighted_fpkm\n"; }') >> results/depths.txt
+
+#this version only counts genes with depth<1
+       echo $NAME $( samtools view -c $f ) $( bedtools genomecov -ibam $f -g /home/jri/projects/genomesize/data/cdna_length_file.txt | \
         perl -ne 'while(<>){ chomp; @data=split(/\t/,$_);
-	$depths{$data[0]}+=$data[1]*$data[4]; $lengths{$data[0]}=$data[3]; $tbp_align+=$data[1]*$data[2]; }
-	END { print STDERR $ngenes; foreach(keys(%depths)){ $ngenes++; $fpkm+=($depths{$_}-$fpkm)/$ngenes; 
-	$weighted_fpkm+=$depths{$_}*$lengths{$_}; $total_length+=$lengths{$_};}; 
-	$weighted_fpkm=$weighted_fpkm/$total_length; print "$tbp_align\t$fpkm\t$weighted_fpkm\n"; }') >> results/depths.txt
+       $depths{$data[0]}+=$data[1]*$data[4]; $lengths{$data[0]}=$data[3]; $tbp_align+=$data[1]*$data[2]; }
+       END { print STDERR $ngenes; foreach(keys(%depths)){ next unless $depths{$_}<1; $ngenes++; $fpkm+=($depths{$_}-$fpkm)/$ngenes;
+       $weighted_fpkm+=$depths{$_}*$lengths{$_}; $total_length+=$lengths{$_};};
+       $weighted_fpkm=$weighted_fpkm/$total_length; print "$tbp_align\t$fpkm\t$weighted_fpkm\n"; }') >> results/cutdepths.txt
+
 done
 
 #bedtools output: gene depth bp_at_depth length_gene percent_gene_at_depth
