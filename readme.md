@@ -18,6 +18,10 @@ Should be able to use percentage of reads mapping to FGS, assuming on average si
 
 #### Files
 
+CDP.csv genome size and fraction of repetitive sequences (estimated using mosaik 1.0) for the first 96 samples of the CDP.
+
+depths: depth data, each row is: LINE TOTAL_READS TOTAL_BP_ALIGNED MEAN_FPKM WEIGHTED_MEAN_FPKM where weighting is done on gene length
+
 seed_size.Rmd: R markdown of NAM genome size from Chia et al. vs. phenotype data from Panzea. 
 Shows plant height flowering time correlation, but not with seed size.
 
