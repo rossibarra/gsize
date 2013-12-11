@@ -22,6 +22,8 @@ CDP.csv genome size and fraction of repetitive sequences (estimated using mosaik
 
 depths: depth data, each row is: LINE TOTAL_READS TOTAL_BP_ALIGNED MEAN_FPKM WEIGHTED_MEAN_FPKM where weighting is done on gene length
 
+example_gene_depths: mean depth per gene for RIMMA0619 as an example
+
 seed_size.Rmd: R markdown of NAM genome size from Chia et al. vs. phenotype data from Panzea. 
 Shows plant height flowering time correlation, but not with seed size.
 
