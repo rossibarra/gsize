@@ -22,7 +22,7 @@ do
 
 #this version only counts genes with depth<1
        echo $NAME $( samtools view -c $f ) $( bedtools genomecov -ibam $f -g /home/jri/projects/genomesize/data/cdna_length_file.txt | \
-        perl -ne 'while(<>){ chomp; @data=split(/\t/,$_); 
+        perl -ne 'while(<>){ chomp; @data=split(/\t/,$_); next if $depths[1]>3; 
        $depths{$data[0]}+=$data[1]*$data[4]; $lengths{$data[0]}=$data[3]; $tbp_align+=$data[1]*$data[2]; }
        END { print STDERR $ngenes; foreach(keys(%depths)){ next unless $depths{$_}<1; $ngenes++; $fpkm+=($depths{$_}-$fpkm)/$ngenes;
        $weighted_fpkm+=$depths{$_}*$lengths{$_}; $total_length+=$lengths{$_};};
