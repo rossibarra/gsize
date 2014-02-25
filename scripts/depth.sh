@@ -22,12 +22,12 @@ do
 
 #this version only counts genes with depth<1
        echo $NAME $( samtools view -c $f ) $( bedtools genomecov -ibam $f -g /home/jri/projects/genomesize/data/cdna_length_file.txt | \
-        perl -ne 'while(<>){ chomp; @data=split(/\t/,$_);
+        perl -ne 'while(<>){ chomp; @data=split(/\t/,$_); 
        $depths{$data[0]}+=$data[1]*$data[4]; $lengths{$data[0]}=$data[3]; $tbp_align+=$data[1]*$data[2]; }
        END { print STDERR $ngenes; foreach(keys(%depths)){ next unless $depths{$_}<1; $ngenes++; $fpkm+=($depths{$_}-$fpkm)/$ngenes;
        $weighted_fpkm+=$depths{$_}*$lengths{$_}; $total_length+=$lengths{$_};};
        $weighted_fpkm=$weighted_fpkm/$total_length; print "$tbp_align\t$fpkm\t$weighted_fpkm\n"; }') >> results/cutdepths.txt
-
+# could add a next if $depths[1]>10 to cut out ALL regions with depth >10
 done
 
 #bedtools output: gene depth bp_at_depth length_gene percent_gene_at_depth

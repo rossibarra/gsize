@@ -14,6 +14,6 @@ for f in $FILES;
 do
 	echo "$f"
 	NAME=$( echo "$f" | sed -e 's/\/group\/jrigrp\/Share\/PaulB\_Data\/Run1\_Fwd\///g')
-	bwa mem -t 2 /home/jri/projects/genomesize/data/Zea_mays.AGPv3.20.cdna.all.fa $f | samtools view -Su - | samtools sort - results/$NAME 
+	bwa mem -t 2 /home/jri/projects/genomesize/data/Zea_mays.AGPv3.21.cdna.T01.fa $f | samtools view -Su - | samtools sort - results/$NAME 
 #	bwa mem -t 2 ../data/Zea_mays.AGPv3.20.cdna.all.fa /group/jrigrp/Share/PaulB_Data/Run1_Fwd/$NAME | samtools view -S -b > ../results/$NAME.bam
 done

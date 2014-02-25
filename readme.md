@@ -18,6 +18,8 @@ Should be able to use percentage of reads mapping to FGS, assuming on average si
 
 #### Files
 
+(Note large files are not hosted on github and only on the server)
+
 CDP.csv genome size and fraction of repetitive sequences (estimated using mosaik 1.0) for the first 96 samples of the CDP.
 
 depths: depth data, each row is: LINE TOTAL_READS TOTAL_BP_ALIGNED MEAN_FPKM WEIGHTED_MEAN_FPKM where weighting is done on gene length
@@ -28,4 +30,6 @@ seed_size.Rmd: R markdown of NAM genome size from Chia et al. vs. phenotype data
 Shows plant height flowering time correlation, but not with seed size.
 
 Zea_mays.AGPv3.20.cdna.all.fa: cdna ab initio for v3 reference genome. Probably sucky, but should catch all/most real stuff.
-cdna_lengths: length of each cdna in Zea_mays.AGPv3.20.cdna.all.fa, u seful for calculating per gene depth.
+cdna_lengths: length of each cdna in Zea_mays.AGPv3.20.cdna.all.fa, u seful for calculating per gene depth. Same file as v21.
+
+Zea_mays.AGPv3.21.cdna.T01.fa : cdna for v3 reference genome. only T01 for each gene, filtered out all genes except ones with cdna:known and not categorized as "abinitio".  

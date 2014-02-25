@@ -1,6 +1,6 @@
 results/*.merged
 results/*.bam
-data/Zea_mays.AGPv3.20.cdna.all.fa*
+data/Zea_mays.AGPv3*
 temp/*
 errors/*
 outs/*
