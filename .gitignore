@@ -1,5 +1,4 @@
-results/*.merged
-results/*.bam
+*.bam
 data/Zea_mays.AGPv3*
 temp/*
 errors/*
