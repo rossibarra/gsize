@@ -1,0 +1,10 @@
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL06-TIP260_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/CML69_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/Oh43_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/W64A_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TDD39103_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL25-TIP489_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL15_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL05_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/B97_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/Tx303_merged.bam
