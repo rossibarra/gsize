@@ -29,7 +29,10 @@ example_gene_depths: mean depth per gene for RIMMA0619 as an example
 seed_size.Rmd: R markdown of NAM genome size from Chia et al. vs. phenotype data from Panzea. 
 Shows plant height flowering time correlation, but not with seed size.
 
+# Proof of concept
+
 Zea_mays.AGPv3.20.cdna.all.fa: cdna ab initio for v3 reference genome. Probably sucky, but should catch all/most real stuff.
 cdna_lengths: length of each cdna in Zea_mays.AGPv3.20.cdna.all.fa, u seful for calculating per gene depth. Same file as v21.
 
 Zea_mays.AGPv3.21.cdna.T01.fa : cdna for v3 reference genome. only T01 for each gene, filtered out all genes except ones with cdna:known and not categorized as "abinitio".  
+use: cat Zea_mays.AGPv3.22.cdna.all.fa| perl -ne '$print=0; while(<>){ if($_=~m/^>/){ if( $_=~m/T01/ && $_=~m/known/ ){ $print=1 } else{ $print=0 }; }; print $_ if $print==1}'  > Zea_mays.AGPv3.22.cdna.T01.fa
