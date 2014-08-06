@@ -52,6 +52,8 @@ Our solution is to filter the set of cDNAs to those that have a beleivable numbe
 We start by removing all the ab initio genes and only keeping the first transcript. Unzip the cDNA and run:
 
 	perl -e 'open FILE, "<Zea_mays.AGPv3.22.cdna.all.fa"; while(<FILE>){ if($_=~m/^>/ ){ $_=~m/^>GRMZ.*_T(\d+)/; $transcript=$1; $known= $_=~m/known/ ? 1:0; $abinit=$_=~m/abinitio/ ? 1: 0; }; if($transcript == "01" && $known == 1 && $abinit==0){ print $_; }} '  > Zea_mays.AGPv3.22.cdna.T01.fa
+	
+Note that this step is probably not necessary given the "finding good genes" steps below.
 
 #### Map
 
@@ -86,11 +88,11 @@ Using the skip_genes.txt file, we run back through each abundance file, and igno
 
 
 
-# find which genes are high copy number badness from set of abundance files
+##### find which genes are high copy number badness from set of abundance files
 
 
 
-# gets corrected percent
+#### gets corrected percent
 
 
 depths: depth data, each row is: LINE TOTAL_READS TOTAL_BP_ALIGNED MEAN_FPKM WEIGHTED_MEAN_FPKM where weighting is done on gene length
