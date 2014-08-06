@@ -1,0 +1,53 @@
+---
+title: "gsize trials"
+output: html_document
+---
+
+```{r}
+library(ggplot2)
+setwd("~/projects/R_reports")
+```
+
+Get some data on relative genome size from HapMap2 and those reads mapped to Ensembl v3 version 22 of the cDNA with only "known" cDNAs
+```{r}
+#Genome size from Chia
+g=pipe(paste("curl -o - https://gist.githubusercontent.com/rossibarra/7638160/raw/62c4dab3f8a96a7d86cfe01a524dc1df2d03784f/genome_size"))
+gsize<-read.table(g,header=T,colClasses=c("character","numeric","numeric"))
+
+#Mapping to v3 cDNA ("known" cdna only)
+m=pipe(paste("ssh farm 'cat ~/projects/genomesize/results/percent_hm2.txt'"))
+mapped<-read.table(m,header=T,colClasses=c("character",rep("numeric",3)))
+mapped$Line=gsub("_merged.fq.bam","",mapped$Line)
+
+#Munge away: get lines with both genome size and percent mapping
+data<-merge(gsize,mapped,by="Line")
+```
+
+Test correlation
+```{r}
+ggplot(data=data,aes(x=GenomeSize,y=percent))+geom_point()+geom_smooth(method="lm")+xlab("1C genome size")+ylab("Fraction Reads Aligning to cDNA")
+cor.test(data$GenomeSize,data$percent)
+```
+
+Significant is good, but positive correlation is not what we predict. Let's remove TILs and see what happens
+```{r}
+x=data[c(1:24,34:35),]
+ggplot(data=x,aes(x=GenomeSize,y=percent))+geom_point()+geom_smooth(method="lm")+xlab("1C genome size")+ylab("Fraction Reads Aligning to cDNA")
+cor.test(x$GenomeSize,x$percent)
+```
+
+Go back to RIMMAs because Paul's script can't handle hapmap2. Mapped RIMMAs to v3 version 22 of the cDNA with only "known" cDNAs, then counted abundance only of genes with proportion read mapping < 5E-5
+
+Get data
+```{r}
+#genome size
+rimma_gs<-read.csv("~/Desktop/gsize_rimma.csv",header=T)
+#percent mapping
+rimma_perc<-read.csv("~/Desktop/fixed_genes_precent.txt",header=T)
+rimma_data<-merge(rimma_gs,rimma_perc,by.x="Line",by.y="file")
+```
+
+Correlation and plot -- WOO DADDY!
+```{r}
+ggplot(data=rimma_data,aes(x=gsize,y=percent))+geom_point()+geom_smooth(method="lm")+xlab("1C genome size")+ylab("Fraction Reads Aligning to corrected cDNA")
+cor.test(rimma_data$gsize,rimma_data$percent)
