@@ -19,6 +19,6 @@ echo $FILE
 #do
 #	echo "$f"
 #	NAME=$( echo "$f" | sed -e 's/\/group\/jrigrp\/Share\/PaulB\_Data\/Run1\_Fwd\///g')
-	bwa mem -t 2 /home/jri/projects/genomesize/data/Zea_mays.AGPv3.22.cdna.T01.fa data/hm2/$FILE | samtools view -Su - | samtools sort - results/$FILE
+	bwa mem -t 2 /home/jri/projects/genomesize/data/Zea_mays.AGPv3.22.cdna.T01.fa data/hm2/$FILE | samtools view -Su - > alignments/$FILE
 #	bwa mem -t 2 ../data/Zea_mays.AGPv3.20.cdna.all.fa /group/jrigrp/Share/PaulB_Data/Run1_Fwd/$NAME | samtools view -S -b > ../results/$NAME.bam
 #done

@@ -1,6 +1,4 @@
-*.bam
-data/Zea_mays.AGPv3*
-temp/*
 errors/*
 outs/*
 data/hm2/*
+alignments/*
