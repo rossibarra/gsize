@@ -35,27 +35,26 @@ my ($readid, $flag, $tehit, $pos, $mapq, $cigar, $rnext, $pnext, $isize, $seq, $
 my $totalreads = 0;
 
 while (<SAM>){
-	if ($_ =~ m/^HWI/){
-		chomp;
-		($readid, $flag, $tehit, $pos, $mapq, $cigar, $rnext, $pnext, $isize, $seq, $qual, $tag1, $tag2, $tag3) = split("\t");
-		#check if the read is the same, in which case it is mapping multiply
-		#print "$readid\t$tempreadid\n";
-		if ($tempreadid =~ m/$readid/) {
-			#print "i get here\n";
-			push (@tempmultmap, $tehit);
-			$n += 1;
-			#print join(", ", @tempmultmap) . "\n$n\n"; #diagnostic line
-		} else {
+	next if $_=~m/^\@/;	
+	chomp;
+	($readid, $flag, $tehit, $pos, $mapq, $cigar, $rnext, $pnext, $isize, $seq, $qual, $tag1, $tag2, $tag3) = split("\t");
+	#check if the read is the same, in which case it is mapping multiply
+	#print "$readid\t$tempreadid\n";
+	if ($tempreadid =~ m/$readid/) {
+		#print "i get here\n";
+		push (@tempmultmap, $tehit);
+		$n += 1;
+		#print join(", ", @tempmultmap) . "\n$n\n"; #diagnostic line
+	} 
+	else {
 		$totalreads++;
 		foreach my $name (@tempmultmap) {
 			$TEs{$name} += 1/$n;
-
 		}
 		@tempmultmap = ();
 		$n = 1;
 		push (@tempmultmap, $tehit);
 		$tempreadid = $readid;
-		}
 	}
 }
 

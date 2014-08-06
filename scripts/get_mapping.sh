@@ -1,3 +1,18 @@
+#!/bin/bash -l
+#SBATCH -D /home/jri/projects/genomesize
+#SBATCH -J readcounts
+#SBATCH -o outs/out-%j.txt
+#SBATCH -p bigmem
+#SBATCH --ntasks=1
+#SBATCH -e errors/error-%j.txt
+#SBATCH --array=1-51
 
+module load bwa/0.7.5a
+
+#FILE=$( sed -n "$SLURM_ARRAY_TASK_ID"p data/hm2.files ).bam
+FILE=$( sed -n "$SLURM_ARRAY_TASK_ID"p scripts/RIMMAs_list.txt )
+
+echo $FILE
 #gets total reads and mapped reads from bamfile
-for i in $( ls -lth *.bam | grep "M Aug" | sed -e 's/.*\s//g' | sed '1d' ); do echo $i; samtools view $i | tee >( cut -f 1 | sort -n | uniq | wc -l ) | cut -f 1,3 | grep -v "*" | cut -f 1 | sort -n | uniq | wc -l; done
+samtools view results/$FILE | tee >( cut -f 1 | sort -n | uniq | wc -l >results/$FILE.total ) | cut -f 1,3 | grep -v "*" | cut -f 1 | sort -n | uniq | wc -l > results/$FILE.mapped;
+perl scripts/parsesam.pl <( samtools view results/$FILE | sort -n -k 1 ) results/abundance."$FILE".txt
