@@ -29,7 +29,7 @@ Our solution is to filter the set of cDNAs to those that have a beleivable numbe
 * gethm2.sh: script to subsample some fastq from the hapmap2 bamfiles
 * jelly.sh: (don't use) script to run jellyfish kmer counter
 * depth.sh: ignore for now
-* fgs.sh
+* fgs.sh: this maps to the cDNA reference using bwa, write to a bam file in the alignments dir. currently all commented out, needs to be run differently for HM2 and Paul's files
 
 
 ##### Results dir
@@ -41,6 +41,8 @@ Our solution is to filter the set of cDNAs to those that have a beleivable numbe
 * errors/outs: You will need an "outs" and an "errors" directory to run these scripts on the cluster, but these are not included in the git as we don't need to track zillions of logfiles.
 * data/hm2: this directory is referenced in scripts and is where I store the subsampled fastq from HM2. See "gethm2.sh" script for details. Not included in repo.
 * alignments: where bam alignments are stored. not included in repo
+* parsesam.pl: Paul's script for splitting sam output into reads per gene, counting multiplt mapping reads as fractions. **Currently does not work correctly for paired end reads**
+
 
 ### Analysis
 
@@ -49,6 +51,11 @@ Our solution is to filter the set of cDNAs to those that have a beleivable numbe
 We start by removing all the ab initio genes and only keeping the first transcript. Unzip the cDNA and run:
 
 	perl -e 'open FILE, "<Zea_mays.AGPv3.22.cdna.all.fa"; while(<FILE>){ if($_=~m/^>/ ){ $_=~m/^>GRMZ.*_T(\d+)/; $transcript=$1; $known= $_=~m/known/ ? 1:0; $abinit=$_=~m/abinitio/ ? 1: 0; }; if($transcript == "01" && $known == 1 && $abinit==0){ print $_; }} '  > Zea_mays.AGPv3.22.cdna.T01.fa
+
+Then we index the file:
+
+	bwa index Zea_mays.AGPv3.22.cdna.T01.fa
+
 
 
 
