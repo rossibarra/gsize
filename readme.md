@@ -78,7 +78,7 @@ First we run through each file, get the total number of reads. Run back through 
 	
 Using the skip_genes.txt file, we run back through each abundance file, and ignore genes that should be skipped, recalculating the reads mapping to our "good" reference, and writing that to a file.
 
-for i in $( ls abundance*); do  echo "$i,$( perl -e 'open BAD, "<skip_genes.txt"; while(<BAD>){ chomp; $badgenes{$_}=1;}; close BAD; @file=<>; $sum=0; $bigsum=0; foreach(@file){ ($gene,$reads)=split(/,/,$_); $bigsum+=$reads; next if $gene=~m/\*/; next if $badgenes{$gene}; $sum+=$reads; } print "$bigsum,$sum,",$sum/$bigsum,"\n";' < $i )" ; done > fixed_genes_precent.txt
+	for i in $( ls abundance*); do  echo "$i,$( perl -e 'open BAD, "<skip_genes.txt"; while(<BAD>){ chomp; $badgenes{$_}=1;}; close BAD; @file=<>; $sum=0; $bigsum=0; foreach(@file){ ($gene,$reads)=split(/,/,$_); $bigsum+=$reads; next if $gene=~m/\*/; next if $badgenes{$gene}; $sum+=$reads; } print "$bigsum,$sum,",$sum/$bigsum,"\n";' < $i )" ; done > fixed_genes_percent.txt
 
 
 
