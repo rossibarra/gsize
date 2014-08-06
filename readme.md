@@ -6,21 +6,23 @@ Project to test/play with genome-size esetimates from kmers and correlations wit
 
 ##### Kmer
 
-Jellyfish kmer counting, gce to do genome size estimation. 
-Correlate those with actual genome size data from Bilinski. 
-If estimates of genome size match, use kmer methods in NAM RILs to look for flowering time effects.
+Kmer counting failed, as coverage was too low. Quick and dirty trials suggested it was giving reasonable estimates only for genomes >>10X coverage.
 
-Failed because coverage is <1 for all lines, so all kmers should map only 1. No information on genome size there.
+##### Genes
 
-##### Filtered Genes
+Here, the idea is that if we have a known quantity of DNA in each line, genome size should negatively correlate with the percent of reads mapping to that known quantity.  We start off using the cDNA.
 
-Should be able to use percentage of reads mapping to FGS, assuming on average single copy, as a means of estimating genome size.
+It turns out a lot fo the cDNA are probably repetitive, as a large number of reads map to them (sometimes 2% of the genome!).  This is clearly unrealistic, and probably due to some TEs being annotated as genes and/or TEs picking up bits of exon of real genes.
+
+Our solution is to filter the set of cDNAs to those that have a beleivable number of reads mapping, and use that as the constant amount of "known" DNA.
+
+
 
 #### Files
 
-(Note large files are not hosted on github and only on the server)
-
-CDP.csv genome size and fraction of repetitive sequences (estimated using mosaik 1.0) for the first 96 samples of the CDP.
+* RIMMAs_list.txt: list of 51 RIMMA lines from the centromere diversity panel for which we have flow cytommetry estimates of genomes size
+* hm2.files: list of the hm2 lines for which I extracted a small amount of fastq sequence for testing
+* 
 
 depths: depth data, each row is: LINE TOTAL_READS TOTAL_BP_ALIGNED MEAN_FPKM WEIGHTED_MEAN_FPKM where weighting is done on gene length
 
