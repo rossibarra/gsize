@@ -35,7 +35,8 @@ Our solution is to filter the set of cDNAs to those that have a beleivable numbe
 ##### Results dir
 * seed_size.Rmd: R markdown analysis of genome size correlation and some phenotypes using hapmap2 data. Shows plant height flowering time correlation, but not with seed size.
 * fixed_genes_precent.txt: output of % mapping for the "good" set of standard genes.  columns are line,total_reads,mapped_reads_corrected,percent_corrected where "corrected" means we're ignoring those genes that had too many reads hit
-
+* mapped_uncorrected_rimma.txt: total number of reads and reads mapped to v3.22 cDNA, uncorrected for genes with too many reads mapping. from get_mapping.sh
+* example.abundance.txt: example abundance per gene output from Paul's parsesam.pl script
 
 ##### Other dirs
 
