@@ -48,6 +48,8 @@ Our solution is to filter the set of cDNAs to those that have a beleivable numbe
 
 ### Analysis
 
+You can see results of R analyses [here](http://rpubs.com/rossibarra/24500) and [here](http://rpubs.com/rossibarra/24404).
+
 #### Clean up cDNA
 
 We start by removing all the ab initio genes and only keeping the first transcript. Unzip the cDNA and run:

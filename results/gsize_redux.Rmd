@@ -5,8 +5,29 @@ output: html_document
 
 ```{r}
 library(ggplot2)
-setwd("~/projects/genomesize/")
+setwd("~/projects/gsize/")
 ```
+
+Start with RIMMAs because Paul's script can't handle hapmap2 paired end reads. Mapped RIMMAs to v3 version 22 of the cDNA with only "known" cDNAs, then counted abundance only of genes with proportion read mapping < 5E-5
+
+Get data
+```{r}
+#genome size
+rimma_gs<-read.csv("~/projects/gsize/data/gsize_rimma.csv",header=T)
+#percent mapping, change columns, fix filenames
+rimma_perc<-read.csv("~/projects/gsize/results/fixed_genes_percent.txt",header=F)
+colnames(rimma_perc)=c("Line","total","mapped","percent")
+rimma_perc$Line=gsub(".fastq.bam.txt","",gsub("abundance.","",rimma_perc$Line))
+rimma_data<-merge(rimma_gs,rimma_perc,by="Line")
+```
+
+Correlation and plot.
+```{r}
+ggplot(data=rimma_data,aes(x=gsize,y=percent))+geom_point()+geom_smooth(method="lm")+xlab("1C genome size")+ylab("Fraction Reads Aligning to corrected cDNA")
+cor.test(rimma_data$gsize,rimma_data$percent)
+```
+
+Solid negative correlation, but not fantastic $r^2$.  The genome sizes for these lines come from a *different individual* from the same accession, so we don't expect great correlation.
 
 Get some data on relative genome size from HapMap2 and those reads mapped to Ensembl v3 version 22 of the cDNA with only "known" cDNAs
 ```{r}
@@ -36,18 +57,3 @@ Significant is good, but positive correlation is not what we predict. Let's remo
 #cor.test(x$GenomeSize,x$percent)
 ```
 
-Go back to RIMMAs because Paul's script can't handle hapmap2. Mapped RIMMAs to v3 version 22 of the cDNA with only "known" cDNAs, then counted abundance only of genes with proportion read mapping < 5E-5
-
-Get data
-```{r}
-#genome size
-rimma_gs<-read.csv("data/gsize_rimma.csv",header=T)
-#percent mapping
-rimma_perc<-read.csv(""~/Desktop/"results/fixed_genes_precent.txt",header=T)
-rimma_data<-merge(rimma_gs,rimma_perc,by.x="Line",by.y="file")
-```
-
-Correlation and plot -- WOO DADDY!
-```{r}
-ggplot(data=rimma_data,aes(x=gsize,y=percent))+geom_point()+geom_smooth(method="lm")+xlab("1C genome size")+ylab("Fraction Reads Aligning to corrected cDNA")
-cor.test(rimma_data$gsize,rimma_data$percent)
