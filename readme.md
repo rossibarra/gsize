@@ -77,8 +77,7 @@ Now we have a list of files names "abundance.blah" that have per-gene counts of 
 
 First we run through each file, get the total number of reads. Run back through each file and calculate the % of reads mapping to each genes.  We flag any gene that has more than 0.00001% of reads mapping.  We do this across all files, make a list of genes to ignore, and write that to "skip_genes.txt" in the results directory.
 
-	for i in $( ls abundance*); do  perl -e '@file=<>; $sum=0; print $file[0]; foreach(@file){ ($gene,$reads)=split(/,/,$_); $sum+=$reads unless $gene=~m/\*/} print $sum; foreach(@file){ ($gene,$reads)=split(/,/,$_); next if $gene=~m/\*/; print "$gene\t",$reads/$sum,"\n" if $reads/$sum>1E-5; }  ' < $i >> bad_genes; done; cut -f 1 bad_genes | sort -n | uniq > skip_genes.txt
-	
+	cut -f 1 <( for i in $( ls abundance*); do  perl -e '@file=<>; $sum=0; print $file[0]; foreach(@file){ ($gene,$reads)=split(/,/,$_); $sum+=$reads unless $gene=~m/\*/} print $sum; foreach(@file){ ($gene,$reads)=split(/,/,$_); next if $gene=~m/\*/; print "$gene\t",$reads/$sum,"\n" if $reads/$sum>5E-5; }  ' < $i; done ) | sort -n | uniq > skip_genes.txt	
 Using the skip_genes.txt file, we run back through each abundance file, and ignore genes that should be skipped, recalculating the reads mapping to our "good" reference, and writing that to a file.
 
 	for i in $( ls abundance*); do  echo "$i,$( perl -e 'open BAD, "<skip_genes.txt"; while(<BAD>){ chomp; $badgenes{$_}=1;}; close BAD; @file=<>; $sum=0; $bigsum=0; foreach(@file){ ($gene,$reads)=split(/,/,$_); $bigsum+=$reads; next if $gene=~m/\*/; next if $badgenes{$gene}; $sum+=$reads; } print "$bigsum,$sum,",$sum/$bigsum,"\n";' < $i )" ; done > fixed_genes_percent.txt
