@@ -8,8 +8,9 @@
 
 module load bwa/0.7.5a
 
-FILE=$( sed -n "$SLURM_ARRAY_TASK_ID"p data/hm2.files | sed -e 's/fq/bam/' )
+fq=$( sed -n "$SLURM_ARRAY_TASK_ID"p data/hm2.files )
+bam=$( echo $fq | sed -e 's/fq/bam/' )
+bamdir="/group/jrigrp3/hapmap2_bam/Disk3CSHL_bams_bwamem/"
 
-out=$( echo $FILE | sed -e 's/.*\///g' | sed -e 's/bam/fq/')
-bedtools bamtofastq -i <( samtools view -s 0.05 -u $FILE ) -fq data/hm2/$out.1 -fq2 data/hm2/$out.2
+bedtools bamtofastq -i <( samtools view -s 0.05 -u "$bamdir"/"$bam" ) -fq data/hm2/$fq.1 -fq2 data/hm2/$fq.2
 
