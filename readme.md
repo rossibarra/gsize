@@ -77,9 +77,12 @@ Then we get mapping data (this uses Paul's script and assumes single end reads).
 
 Now we have a list of files names "abundance.blah" that have per-gene counts of reads mapping. We want to use these to filter out genes that have way too many reads mapping and should be removed from our "standard".
 
-First we run through each file, get the total number of reads. Run back through each file and calculate the % of reads mapping to each genes.  We flag any gene that has more than 0.00001% of reads mapping.  We do this across all files, make a list of genes to ignore, and write that to "skip_genes.txt" in the results directory.
+First we run through each file, get the total number of reads. Run back through each file and calculate the % of reads mapping to each genes.  We flag any gene that has more than 0.00001% of reads mapping.  We do this across all files, make a list of genes to ignore, and write that to "skip_genes.txt" in the results directory. 
 
-	cut -f 1 <( for i in $( ls abundance*); do  perl -e '@file=<>; $sum=0; print $file[0]; foreach(@file){ ($gene,$reads)=split(/,/,$_); $sum+=$reads unless $gene=~m/\*/} print $sum; foreach(@file){ ($gene,$reads)=split(/,/,$_); next if $gene=~m/\*/; print "$gene\t",$reads/$sum,"\n" if $reads/$sum>5E-5; }  ' < $i; done ) | sort -n | uniq > skip_genes.txt	
+	cut -f 1 <( for i in $( ls abundance*); do  perl -e '@file=<>; $sum=0; print $file[0]; foreach(@file){ ($gene,$reads)=split(/,/,$_); $sum+=$reads unless $gene=~m/\*/} print $sum; foreach(@file){ ($gene,$reads)=split(/,/,$_); next if $gene=~m/\*/; print "$gene\t",$reads/$sum,"\n" if $reads/$sum>5E-5; }  ' < $i; done ) | sort -n | uniq > skip_genes.txt
+	
+Note that 5E-5 is not a perfect cutoff.  For some files you may need higher/lower.  Key is to rule out the worst set of repetitive stuff, so probably not more than 5000 genes you want to be removing.
+
 Using the skip_genes.txt file, we run back through each abundance file, and ignore genes that should be skipped, recalculating the reads mapping to our "good" reference, and writing that to a file.
 
 	for i in $( ls abundance*); do  echo "$i,$( perl -e 'open BAD, "<skip_genes.txt"; while(<BAD>){ chomp; $badgenes{$_}=1;}; close BAD; @file=<>; $sum=0; $bigsum=0; foreach(@file){ ($gene,$reads)=split(/,/,$_); $bigsum+=$reads; next if $gene=~m/\*/; next if $badgenes{$gene}; $sum+=$reads; } print "$bigsum,$sum,",$sum/$bigsum,"\n";' < $i )" ; done > fixed_genes_percent.txt
