@@ -5,6 +5,7 @@
 #SBATCH -p bigmem
 #SBATCH --ntasks=2
 #SBATCH -e errors/error-%j.txt
+#SBATCH --array=1-103
 
 module load bwa/0.7.5a
 
@@ -13,8 +14,8 @@ module load bwa/0.7.5a
 	# Be sure to add array jobs to header here.
 	#SBATCH --array=1-103
 
-	#FILE=$( sed -n "$SLURM_ARRAY_TASK_ID"p data/hm2.files )
-	#bwa mem -t 2 /home/jri/projects/genomesize/data/Zea_mays.AGPv3.22.cdna.T01.fa data/hm2/$FILE | samtools view -Su - > alignments/$FILE
+	FILE=$( sed -n "$SLURM_ARRAY_TASK_ID"p data/hm2.files )
+	bwa mem -t 2 /home/jri/projects/genomesize/data/Zea_mays.AGPv3.22.cdna.T01.fa data/hm2/"$FILE".1 | samtools view -Su - > alignments/$FILE.bam
 
 #for Paul's RIMMA files
 	#FILES=/group/jrigrp/Share/PaulB_Data/Run1_Fwd/*fastq
