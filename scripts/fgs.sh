@@ -18,7 +18,7 @@ module load bwa/0.7.5a
 	bwa mem -t 2 /home/jri/projects/genomesize/data/Zea_mays.AGPv3.22.cdna.T01.fa data/hm2/"$FILE".1 | samtools view -Su - > alignments/$FILE.bam
 
 #for Paul's RIMMA files
-	#FILES=/group/jrigrp/Share/PaulB_Data/Run1_Fwd/*fastq
+	#FILES=data/rimmas/*fastq
 
 	#for f in $FILES;
 	#do
