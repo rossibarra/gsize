@@ -15,7 +15,7 @@ Get data
 #genome size
 rimma_gs<-read.csv("~/projects/gsize/data/gsize_rimma.csv",header=T)
 #percent mapping, change columns, fix filenames
-rimma_perc<-read.csv("~/projects/gsize/results/fixed_genes_percent.txt",header=F)
+rimma_perc<-read.csv("~/projects/gsize/results/fixed_genes_percent_rimma.txt",header=F)
 colnames(rimma_perc)=c("Line","total","mapped","percent")
 rimma_perc$Line=gsub(".fastq.bam.txt","",gsub("abundance.","",rimma_perc$Line))
 rimma_data<-merge(rimma_gs,rimma_perc,by="Line")
@@ -37,23 +37,27 @@ gsize<-read.table(g,header=T,colClasses=c("character","numeric","numeric"))
 
 #Mapping to v3 cDNA ("known" cdna only)
 #m=pipe(paste("ssh farm 'cat ~/projects/genomesize/results/percent_hm2.txt'"))
-#mapped<-read.table(m,header=T,colClasses=c("character",rep("numeric",3)))
-#mapped$Line=gsub("_merged.fq.bam","",mapped$Line)
+
+#percent mapping, change columns, fix filenames
+hm2_perc<-read.csv("~/projects/gsize/results/fixed_genes_percent_hm2.txt",header=F)
+colnames(hm2_perc)=c("Line","total","mapped","percent")
+hm2_perc$Line=gsub("_merged.fq.bam.txt","",gsub("abundance.","",hm2_perc$Line))
 
 #Munge away: get lines with both genome size and percent mapping
-#data<-merge(gsize,mapped,by="Line")
+data<-merge(gsize,hm2_perc,by="Line")
 ```
 
 Test correlation
 ```{r}
-#ggplot(data=data,aes(x=GenomeSize,y=percent))+geom_point()+geom_smooth(method="lm")+xlab("1C genome size")+ylab("Fraction Reads Aligning to cDNA")
-#cor.test(data$GenomeSize,data$percent)
+ggplot(data=data,aes(x=GenomeSize,y=percent))+geom_point()+geom_smooth(method="lm")+xlab("1C genome size")+ylab("Fraction Reads Aligning to cDNA")
+cor.test(data$GenomeSize,data$percent)
 ```
 
 Significant is good, but positive correlation is not what we predict. Let's remove TILs and see what happens
 ```{r}
-#x=data[c(1:24,34:35),]
-#ggplot(data=x,aes(x=GenomeSize,y=percent))+geom_point()+geom_smooth(method="lm")+xlab("1C genome size")+ylab("Fraction Reads Aligning to cDNA")
-#cor.test(x$GenomeSize,x$percent)
+x=data[c(1:24,34:35),]
+ggplot(data=x,aes(x=GenomeSize,y=percent))+geom_point()+geom_smooth(method="lm")+xlab("1C genome size")+ylab("Fraction Reads Aligning to cDNA")
+cor.test(x$GenomeSize,x$percent)
 ```
 
+Still sucky.  Will need to go back and revisit filtering. For now, ugh.
