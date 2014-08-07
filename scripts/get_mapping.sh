@@ -5,12 +5,12 @@
 #SBATCH -p bigmem
 #SBATCH --ntasks=1
 #SBATCH -e errors/error-%j.txt
-#SBATCH --array=1-51
+#SBATCH --array=1-103
 
 module load bwa/0.7.5a
 
-#FILE=$( sed -n "$SLURM_ARRAY_TASK_ID"p data/hm2.files ).bam
-FILE=$( sed -n "$SLURM_ARRAY_TASK_ID"p data/RIMMAs_list.txt )
+FILE=$( sed -n "$SLURM_ARRAY_TASK_ID"p data/hm2.files ).bam
+#FILE=$( sed -n "$SLURM_ARRAY_TASK_ID"p data/RIMMAs_list.txt )
 
 echo $FILE
 #gets total reads and mapped reads from bamfile
