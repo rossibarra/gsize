@@ -15,8 +15,8 @@ Get data
 #genome size
 rimma_gs<-read.csv("~/projects/gsize/data/gsize_rimma.csv",header=T)
 #percent mapping, change columns, fix filenames
-rimma_perc<-read.csv("~/projects/gsize/results/fixed_genes_percent_rimma.txt",header=F)
-colnames(rimma_perc)=c("Line","total","mapped","percent")
+rimma_perc<-read.csv("~/projects/gsize/results/fixed_genes_percent.txt",header=F)
+colnames(rimma_perc)=c("Line","total_reads","tota_genes","mapped_reads","mapped_genes","percent")
 rimma_perc$Line=gsub(".fastq.bam.txt","",gsub("abundance.","",rimma_perc$Line))
 rimma_data<-merge(rimma_gs,rimma_perc,by="Line")
 ```
@@ -40,7 +40,7 @@ gsize<-read.table(g,header=T,colClasses=c("character","numeric","numeric"))
 
 #percent mapping, change columns, fix filenames
 hm2_perc<-read.csv("~/projects/gsize/results/fixed_genes_percent.txt",header=F)
-colnames(hm2_perc)=c("Line","total","mapped","percent")
+colnames(hm2_perc)=c("Line","total_reads","tota_genes","mapped_reads","mapped_genes","percent")
 hm2_perc$Line=gsub("_merged.fq.bam.txt","",gsub("abundance.","",hm2_perc$Line))
 
 #Munge away: get lines with both genome size and percent mapping

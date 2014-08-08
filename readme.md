@@ -52,17 +52,20 @@ You can see results of R analyses [here](http://rpubs.com/rossibarra/24500) and 
 
 #### Clean up cDNA
 
-We start by removing all the ab initio genes and only keeping the first transcript. Unzip the cDNA and run:
+We now skip this step. Seems to work better without.
 
-	perl -e 'open FILE, "<Zea_mays.AGPv3.22.cdna.all.fa"; while(<FILE>){ if($_=~m/^>/ ){ $_=~m/^>GRMZ.*_T(\d+)/; $transcript=$1; $known= $_=~m/known/ ? 1:0; $abinit=$_=~m/abinitio/ ? 1: 0; }; if($transcript == "01" && $known == 1 && $abinit==0){ print $_; }} '  > Zea_mays.AGPv3.22.cdna.T01.fa
+~~We start by removing all the ab initio genes and only keeping the first transcript. Unzip the cDNA and run:~~
+
+~~perl -e 'open FILE, "<Zea_mays.AGPv3.22.cdna.all.fa"; while(<FILE>){ if($_=~m/^>/ ){ $_=~m/^>GRMZ.*_T(\d+)/; $transcript=$1; $known= $_=~m/known/ ? 1:0; $abinit=$_=~m/abinitio/ ? 1: 0; }; if($transcript == "01" && $known == 1 && $abinit==0){ print $_; }} '  > Zea_mays.AGPv3.22.cdna.T01.fa~~
 	
-Note that this step is probably not necessary given the "finding good genes" steps below.
+~~Note that this step is probably not necessary given the "finding good genes" steps below.~~
+
 
 #### Map
 
 Then we index the file:
 
-	bwa index Zea_mays.AGPv3.22.cdna.T01.fa
+	bwa index Zea_mays.AGPv3.22.cdna.all.fa
 
 Then we make sure fgs file is tweaked appropriately for our samples/dirs, and align:
 
@@ -85,7 +88,7 @@ Note that 5E-5 is not a perfect cutoff.  For some files you may need higher/lowe
 
 Using the skip_genes.txt file, we run back through each abundance file, and ignore genes that should be skipped, recalculating the reads mapping to our "good" reference, and writing that to a file.
 
-	for i in $( ls abundance*); do  echo "$i,$( perl -e 'open BAD, "<skip_genes.txt"; while(<BAD>){ chomp; $badgenes{$_}=1;}; close BAD; @file=<>; $sum=0; $bigsum=0; foreach(@file){ ($gene,$reads)=split(/,/,$_); $bigsum+=$reads; next if $gene=~m/\*/; next if $badgenes{$gene}; $sum+=$reads; } print "$bigsum,$sum,",$sum/$bigsum,"\n";' < $i )" ; done > fixed_genes_percent.txt
+	for i in $( ls abundance*); do  echo "$i,$( perl -e 'open BAD, "<skip_genes.txt"; while(<BAD>){ chomp; $badgenes{$_}=1;}; close BAD; @file=<>; $count=0; $totcount=0; $sum=0; $bigsum=0; foreach(@file){ ($gene,$reads)=split(/,/,$_); $bigsum+=$reads; $totcount+=1; next if $gene=~m/\*/; next if $badgenes{$gene}; $count+=1; $sum+=$reads; } print "$bigsum,$totcount,$sum,$count,",$sum/$bigsum,"\n";' < $i )" ; done > fixed_genes_percent.txt
 
 
 
