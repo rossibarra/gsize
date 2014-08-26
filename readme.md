@@ -90,23 +90,5 @@ Using the skip_genes.txt file, we run back through each abundance file, and igno
 
 	for i in $( ls abundance*); do  echo "$i,$( perl -e 'open BAD, "<skip_genes.txt"; while(<BAD>){ chomp; $badgenes{$_}=1;}; close BAD; @file=<>; $count=0; $totcount=0; $sum=0; $bigsum=0; foreach(@file){ ($gene,$reads)=split(/,/,$_); $bigsum+=$reads; $totcount+=1; next if $gene=~m/\*/; next if $badgenes{$gene}; $count+=1; $sum+=$reads; } print "$bigsum,$totcount,$sum,$count,",$sum/$bigsum,"\n";' < $i )" ; done > fixed_genes_percent.txt
 
-
-
-## Ignore from here below, needs to be cleaned up
-
-
-
-##### find which genes are high copy number badness from set of abundance files
-
-
-
-#### gets corrected percent
-
-
-depths: depth data, each row is: LINE TOTAL_READS TOTAL_BP_ALIGNED MEAN_FPKM WEIGHTED_MEAN_FPKM where weighting is done on gene length
-
-example_gene_depths: mean depth per gene for RIMMA0619 as an example
-
-should catch all/most real stuff.
-cdna_lengths: length of each cdna in Zea_mays.AGPv3.20.cdna.all.fa, u seful for calculating per gene depth. Same file as v21.
+This columns of this file are: total_reads_aligned, total_genes, corrected_reads, corrected_genes, percent_corrected."
 

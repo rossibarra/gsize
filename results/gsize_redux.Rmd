@@ -39,9 +39,11 @@ gsize<-read.table(g,header=T,colClasses=c("character","numeric","numeric"))
 #m=pipe(paste("ssh farm 'cat ~/projects/genomesize/results/percent_hm2.txt'"))
 
 #percent mapping, change columns, fix filenames
-hm2_perc<-read.csv("~/projects/gsize/results/fixed_genes_percent.txt",header=F)
-colnames(hm2_perc)=c("Line","total_reads","tota_genes","mapped_reads","mapped_genes","percent")
-hm2_perc$Line=gsub("_merged.fq.bam.txt","",gsub("abundance.","",hm2_perc$Line))
+hm2_perc<-read.csv("~/Downloads/fixed_genes_percent.txt",header=F)
+colnames(hm2_perc)=c("Line","total_reads","total_genes","mapped_reads","mapped_genes","percent")
+#hm2_perc$Line=gsub("_merged.fq.bam.txt","",gsub("abundance.","",hm2_perc$Line))
+hm2_perc$Line=gsub(".bam.txt","",gsub("abundance.","",hm2_perc$Line))
+hm2_perc$Line=gsub("IL14H","Il14H",hm2_perc$Line)
 
 #Munge away: get lines with both genome size and percent mapping
 data<-merge(gsize,hm2_perc,by="Line")
