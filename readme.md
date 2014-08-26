@@ -50,17 +50,6 @@ Our solution is to filter the set of cDNAs to those that have a beleivable numbe
 
 You can see results of R analyses [here](http://rpubs.com/rossibarra/24500) and [here](http://rpubs.com/rossibarra/24404).
 
-#### Clean up cDNA
-
-We now skip this step. Seems to work better without.
-
-~~We start by removing all the ab initio genes and only keeping the first transcript. Unzip the cDNA and run:~~
-
-~~perl -e 'open FILE, "<Zea_mays.AGPv3.22.cdna.all.fa"; while(<FILE>){ if($_=~m/^>/ ){ $_=~m/^>GRMZ.*_T(\d+)/; $transcript=$1; $known= $_=~m/known/ ? 1:0; $abinit=$_=~m/abinitio/ ? 1: 0; }; if($transcript == "01" && $known == 1 && $abinit==0){ print $_; }} '  > Zea_mays.AGPv3.22.cdna.T01.fa~~
-	
-~~Note that this step is probably not necessary given the "finding good genes" steps below.~~
-
-
 #### Map
 
 Then we index the file:
@@ -75,8 +64,9 @@ Then we get mapping data (this uses Paul's script and assumes single end reads).
 
 	sbatch -p bigmem get_mapping.sh
 
-#### Find set of "good" genes
+Note that the abundance files that come out of get_mapping.sh each have a line with "*" which has the number of unmapped reads.
 
+#### Find set of "good" genes
 
 Now we have a list of files names "abundance.blah" that have per-gene counts of reads mapping. We want to use these to filter out genes that have way too many reads mapping and should be removed from our "standard".
 
@@ -90,5 +80,5 @@ Using the skip_genes.txt file, we run back through each abundance file, and igno
 
 	for i in $( ls abundance*); do  echo "$i,$( perl -e 'open BAD, "<skip_genes.txt"; while(<BAD>){ chomp; $badgenes{$_}=1;}; close BAD; @file=<>; $count=0; $totcount=0; $sum=0; $bigsum=0; foreach(@file){ ($gene,$reads)=split(/,/,$_); $bigsum+=$reads; $totcount+=1; next if $gene=~m/\*/; next if $badgenes{$gene}; $count+=1; $sum+=$reads; } print "$bigsum,$totcount,$sum,$count,",$sum/$bigsum,"\n";' < $i )" ; done > fixed_genes_percent.txt
 
-This columns of this file are: total_reads_aligned, total_genes, corrected_reads, corrected_genes, percent_corrected."
+This columns of this file are: total_reads, total_genes, corrected_reads, corrected_genes, percent_corrected. Percent corrected is corrected_reads/total_reads. 
 
